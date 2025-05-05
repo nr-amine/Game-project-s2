@@ -1,16 +1,21 @@
-all: jeu
+CC = gcc
+CFLAGS = -Wall -Wextra -g
 
-Grille.o: Grille.c Grille.h 
-	gcc -c -Wall Grille.c
+TARGET = jeu
 
-Pion.o: Pion.c Pion.h
-	gcc -c -Wall Pion.c
+SRCS = main.c Grille.c Pion.c
 
-main.o: main.c Grille.h Pion.h
-	gcc -c -Wall main.c
+OBJS = $(SRCS:.c=.o)
 
-jeu: main.o Grille.o Pion.o 
-	gcc -o jeu main.o Grille.o Pion.o -lncurses
+HEADERS = Grille.h Pion.h
+
+$(TARGET): $(OBJS)
+	$(CC) $(OBJS) -o $(TARGET) -lncurses
+
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -fr *.o jeu
+	rm -f $(OBJS) $(TARGET)
+
+rebuild: clean $(TARGET)

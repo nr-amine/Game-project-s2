@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Grille.h"
+#include "Pion.h"
 #include <ncurses.h>
+
+
 
 
 Grille *Grille_initialiser(int n, int m) {
@@ -38,7 +41,7 @@ void Grille_vider(Grille *M) {
     int start_x = 1 + rand() % (M->n - 2);
     int start_y = 1 + rand() % (M->m - 2);
     M->Grille[start_y][start_x] = RIEN; // Open the starting cell
-    CarveMaze(M, start_x, start_y, 3); // Carve maze with 2x2 paths
+    CarveMaze(M, start_x, start_y, 3); 
 }
 
 
@@ -78,6 +81,21 @@ void Grille_redessiner(Grille *M) {
                     attron(COLOR_PAIR(6));
                     printw("  ");
                     attroff(COLOR_PAIR(6));
+                    break;
+                case SORTIE:
+                    attron(COLOR_PAIR(7));
+                    printw("  ");
+                    attroff(COLOR_PAIR(7));
+                    break;
+                case CROCHETER:
+                    attron(COLOR_PAIR(8));
+                    printw("  ");
+                    attroff(COLOR_PAIR(8));
+                    break;
+                case DYNAMITE:
+                    attron(COLOR_PAIR(9));
+                    printw("  ");
+                    attroff(COLOR_PAIR(9));
                     break;
                 default:
                     attron(COLOR_PAIR(1));
@@ -135,21 +153,80 @@ void CarveMaze(Grille *M, int x, int y, int epaisseur) {
                         M->Grille[y2 + i][x2 + j] = RIEN;
                     }
                 }
-                x = x2; y = y2; // Move to the next cell
-                dir = rand() % 4; // Randomize direction
+                x = x2; y = y2; // Avancer
+                dir = rand() % 4; // chosir une direction aléatoire
                 count = 0;
 
-                // Occasionally start a new branch
                 if (rand() % 3 == 0) {
                     CarveMaze(M, x, y, epaisseur);
                 }
             } else {
-                dir = (dir + 1) % 4; // Try the next direction
+                dir = (dir + 1) % 4; 
                 count += 1;
             }
         } else {
-            dir = (dir + 1) % 4; // Try the next direction
+            dir = (dir + 1) % 4; 
             count += 1;
+        }
+    }
+}
+
+
+void Populer_labyrinthe(Grille *M, int n, int m, Pion *P, bool status) {
+    int num_tresors = 5;
+    int num_pieges = 20;
+    int num_crochetage = 7;
+    int num_dynamite = 5;
+
+    if (status) {
+        for (int i = 0; i < num_tresors; i++) {
+            int x, y;
+            do {
+                x = rand() % (n - 2) + 1; 
+                y = rand() % (m - 2) + 1;
+            } while (M->Grille[y][x] != RIEN); 
+            M->Grille[y][x] = TRESOR;
+        }
+
+        for (int i = 0; i < num_pieges; i++) {
+            int x, y;
+            do {
+                x = rand() % (n - 2) + 1;
+                y = rand() % (m - 2) + 1;
+            } while (M->Grille[y][x] != RIEN);
+            M->Grille[y][x] = PIEGE;
+        }
+
+        for (int i = 0; i < num_crochetage; i++) {
+            int x, y;
+            do {
+                x = rand() % (n - 2) + 1;
+                y = rand() % (m - 2) + 1;
+            } while (M->Grille[y][x] != RIEN);
+            M->Grille[y][x] = CROCHETER;
+        }
+
+        for (int i = 0; i < num_dynamite; i++) {
+            int x, y;
+            do {
+                x = rand() % (n - 2) + 1;
+                y = rand() % (m - 2) + 1;
+            } while (M->Grille[y][x] != RIEN);
+            M->Grille[y][x] = DYNAMITE;
+        }
+        
+    } else {
+        if (P->score == num_tresors) {
+            int num_sorties = 1;
+            for (int i = 0; i < num_sorties; i++) {
+                int x, y;
+                do {
+                    x = rand() % (n - 2) + 1; 
+                    y = rand() % (m - 2) + 1;
+                } while (M->Grille[y][x] != RIEN); 
+                M->Grille[y][x] = SORTIE;
+            }
+            P->score = 0;
         }
     }
 }
