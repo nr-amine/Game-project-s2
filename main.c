@@ -31,7 +31,7 @@ int main() {
     init_color(COLOR_ORANGE, 1000, 500, 0);
     init_pair(9, COLOR_BLACK, COLOR_ORANGE);  // DYNAMITE
 
-    int n = 80, m = 45; // Dimensions
+    int n = 80, m = 45; 
     Grille *M = Grille_initialiser(n, m);
     Grille_vider(M);
 
@@ -50,7 +50,6 @@ int main() {
     Grille_redessiner(M);
     refresh();
 
-    // Game loop
     int ch;
     int comp_piege = 0;
     while (1) {
@@ -76,14 +75,16 @@ int main() {
                 utiliser_dynamite(pawn, M);
                 break;
             case 'q': // Quitter le jeu
-                goto end_game;
+                pion_desallouer(pawn);
+                Grille_desallouer(M);
+                endwin(); 
+                return 0;
         }
 
-        // Move the pawn if there is user input
         if (move != -1) {
             int game_over = Pion_deplacer(move, pawn, M);
             if (game_over) {
-                break; // Exit the game loop if the game is over
+                break; 
             }
         }
 
@@ -105,10 +106,4 @@ int main() {
         
         usleep(50000); // 50ms 
     }
-
-end_game:
-    pion_desallouer(pawn);
-    Grille_desallouer(M);
-    endwin(); 
-    return 0;
 }

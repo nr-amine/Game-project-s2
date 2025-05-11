@@ -30,17 +30,16 @@ void Grille_vider(Grille *M) {
     for (int i = 0; i < M->m; i++) {
         for (int j = 0; j < M->n; j++) {
             if (i == 0 || i == M->m - 1 || j == 0 || j == M->n - 1) {
-                M->Grille[i][j] = BORDURE; // Set borders
+                M->Grille[i][j] = BORDURE;
             } else {
-                M->Grille[i][j] = MUR; // Fill the M with walls
+                M->Grille[i][j] = MUR; 
             }
         }
     }
 
-    // Start carving the maze from a random position
     int start_x = 1 + rand() % (M->n - 2);
     int start_y = 1 + rand() % (M->m - 2);
-    M->Grille[start_y][start_x] = RIEN; // Open the starting cell
+    M->Grille[start_y][start_x] = RIEN; 
     CarveMaze(M, start_x, start_y, 3); 
 }
 
