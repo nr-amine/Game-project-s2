@@ -91,3 +91,43 @@ void Grille_redessiner(Grille *M) {
         printw("\n");
     }
 }
+
+
+
+void Populer_grille(Grille *M, int n, int m, Pion *P, bool status) {
+    int num_tresors = 5;
+    int num_pieges = 20;
+    if (status) {
+        for (int i = 0; i < num_tresors; i++) {
+            int x, y;
+            do {
+                x = rand() % (n - 2) + 1; 
+                y = rand() % (m - 2) + 1;
+            } while (M->Grille[y][x] != RIEN); 
+            M->Grille[y][x] = TRESOR;
+        }
+
+        for (int i = 0; i < num_pieges; i++) {
+            int x, y;
+            do {
+                x = rand() % (n - 2) + 1;
+                y = rand() % (m - 2) + 1;
+            } while (M->Grille[y][x] != RIEN);
+            M->Grille[y][x] = PIEGE;
+        }
+
+    } else {
+        if (P->score == num_tresors) {
+            int num_sorties = 1;
+            for (int i = 0; i < num_sorties; i++) {
+                int x, y;
+                do {
+                    x = rand() % (n - 2) + 1; 
+                    y = rand() % (m - 2) + 1;
+                } while (M->Grille[y][x] != RIEN); 
+                M->Grille[y][x] = SORTIE;
+            }
+            P->score = 0;
+        }
+    }
+}

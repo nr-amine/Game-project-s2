@@ -82,11 +82,6 @@ int Pion_deplacer(Move E, Pion *P, Grille *M) {
 
 
 //Partie pour undo et liste chainée
-typedef struct Bouge {
-    Move E;
-    struct Bouge *next;
-} Bouge;
-
 void ajouter_bouge(Bouge **tete, Move E) {
     Bouge *nouveau = malloc(sizeof(Bouge));
     if (nouveau == NULL) {

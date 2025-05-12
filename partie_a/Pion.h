@@ -3,6 +3,11 @@
 
 typedef enum {HAUT, BAS, DROITE, GAUCHE, UNDO} Move;
 
+typedef struct Bouge {
+    Move E;
+    struct Bouge *next;
+} Bouge;
+
 
 struct Inventaire
 {
@@ -27,5 +32,6 @@ void Bouger_pieges();
 void Crocheter();
 void utiliser_dynamite();
 void Undo();
+void ajouter_bouge();
 
 #endif

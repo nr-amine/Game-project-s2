@@ -30,6 +30,7 @@ int main(int argc, char *argv[]) {
     int n = 80, m = 45; // Dimensions
     Grille *M = Grille_initialiser(n, m);
     Grille_vider(M);
+    Populer_grille(M, n, m, NULL, true);
 
     Pion *pion = allouer_Pion();
     pion->x = 5;
@@ -43,8 +44,8 @@ int main(int argc, char *argv[]) {
     refresh();
 
     int ch;
-int comp_piege = 0;
 Move dern_move = -1;
+Bouge* historique_movements = NULL;
 bool peut_undo = false;
 if (argv[1][0]=='1') {
 while (1) {
@@ -126,8 +127,8 @@ else if (argv[1][0]=='2') {
         }
 
         if (move == UNDO) {
-            Undo(&dern_move, pion, M, &dern_move);
-            if (dern_move == -1) {
+            Undo(&historique_movements, pion, M, &dern_move);
+            if (historique_movements == NULL) {
                 printw("Impossible de faire un undo\n");
                 peut_undo = false;
                 refresh();
@@ -136,8 +137,8 @@ else if (argv[1][0]=='2') {
         }
 
         if (move != -1) {
+            ajouter_bouge(&historique_movements, move);
             int game_over = Pion_deplacer(move, pion, M);
-            ajouter_bouge(&dern_move, move);
             peut_undo = true;
             if (game_over) {
                 break;

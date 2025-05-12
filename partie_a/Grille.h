@@ -16,7 +16,5 @@ void Grille_desallouer(Grille *grille);
 void Grille_vider(Grille *grille);
 void Grille_redessiner(Grille *M);
 void CarveMaze(Grille *M, int x, int y, int epeceur);
-void Populer_labyrinthe(Grille *M, int n, int m, Pion *P, bool status);
-bool game_loop_continu(Grille *M, Pion *P);
-bool game_loop_touches(Grille *M, Pion *P);
+void Populer_grille(Grille *M, int n, int m, Pion *P, bool status);
 #endif
